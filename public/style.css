@@ -621,6 +621,39 @@ html, body {
 
 .empty-hint { font-size: 12px; color: var(--text-4); }
 
+/* Active Timers */
+.timers-feed {
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.timer-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all .2s var(--ease);
+}
+.timer-item:hover { transform: translateX(2px); border-color: var(--teal); }
+
+.timer-pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 0 rgba(45, 212, 191, 0.5);
+  animation: pulse-teal 2s infinite cubic-bezier(0.66, 0, 0, 1);
+  flex-shrink: 0;
+}
+@keyframes pulse-teal {
+  to { box-shadow: 0 0 0 10px rgba(45, 212, 191, 0); }
+}
+
+.timer-details { flex: 1; min-width: 0; }
+.timer-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.timer-countdown { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
+.tm-urgent { color: var(--teal); }
+.tm-cron { color: var(--purple); }
+
 /* ── Strategy Tab ──────────────────────────────────── */
 #tab-strategy { padding: 32px 28px; }
 

@@ -240,7 +240,63 @@ async function loadRightPanel() {
       badge.classList.add('hidden');
     }
   } catch {}
+
+  // Active Timers
+  try {
+    const reminders = await api('/reminders/active');
+    const feed = document.getElementById('activeTimers');
+    if (feed) {
+      if (reminders.length > 0) {
+        window._activeTimersData = reminders;
+        renderTimers();
+        if (!window._timerInterval) {
+          window._timerInterval = setInterval(renderTimers, 1000);
+        }
+      } else {
+        feed.innerHTML = '<p class="empty-hint">No active timers</p>';
+        if (window._timerInterval) { clearInterval(window._timerInterval); window._timerInterval = null; }
+      }
+    }
+  } catch(e) { console.error('Error loading timers:', e); }
 }
+
+window.renderTimers = () => {
+    const feed = document.getElementById('activeTimers');
+    if (!feed || !window._activeTimersData) return;
+    
+    const html = window._activeTimersData.map(r => {
+        let displayTime = r.time_rule;
+        const targetMs = new Date(r.time_rule).getTime();
+        let isCron = r.is_recurring || isNaN(targetMs);
+        
+        if (!isCron) {
+            const diff = targetMs - Date.now();
+            if (diff > 0) {
+                const totalSec = Math.floor(diff/1000);
+                const hrs = Math.floor(totalSec/3600);
+                const mins = Math.floor((totalSec%3600)/60);
+                const secs = totalSec%60;
+                displayTime = `<span class="tm-urgent">IN ${hrs?hrs+'H ':''}${mins}M ${secs}S</span>`;
+            } else {
+                displayTime = '<span class="tm-urgent">TRIGGERING NOW</span>';
+            }
+        } else {
+            // It's a cron
+            displayTime = `<span class="tm-cron">CRON: ${r.time_rule}</span>`;
+        }
+        
+        return `
+        <div class="timer-item">
+            <div class="timer-pulse"></div>
+            <div class="timer-details">
+                <div class="timer-title">${esc(r.title)}</div>
+                <div class="timer-countdown">${displayTime}</div>
+            </div>
+        </div>`;
+    }).join('');
+    
+    if (feed.innerHTML !== html) feed.innerHTML = html;
+};
 
 function showPulse(msg) {
   const el = document.getElementById('pulseFloat');

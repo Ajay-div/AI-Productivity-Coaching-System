@@ -139,6 +139,11 @@ router.post('/events', (req, res) => {
     res.json({ message: 'Event added' });
 });
 
+// ── Reminders ───────────────────────────────────────────
+router.get('/reminders/active', (req, res) => {
+    res.json(db.getActiveReminders());
+});
+
 // ── Activity ────────────────────────────────────────────
 router.get('/activity', (req, res) => {
     const limit = parseInt(req.query.limit) || 50;

@@ -64,8 +64,9 @@ Return ONLY a valid JSON object with these optional fields:
 Rules:
 - If the user asks for a persistent objective, provide a highly detailed, comprehensive quest-like roadmap in "roadmap_steps". Do NOT give 3 steps. You MUST provide at least 8 to 12 distinct, actionable steps that walk the user completely from start to finish.
 - If the user asks for a daily/weekly reminder or a cron job, add it to "reminders" with a standard 5-part cron expression for "time_rule".
-- If the user specifies a one-time reminder, provide an ISO timestamp for "time_rule" and set "is_recurring" to false.
-- Today's date is ${new Date().toISOString().split('T')[0]}.
+- If the user specifies a relative or exact one-time reminder (e.g., "in 15 minutes" or "at 3 PM"), strictly calculate the exact future ISO timestamp based on the CURRENT TIME and provide that timestamp for "time_rule" with "is_recurring" set to false.
+- CURRENT DATE: ${new Date().toISOString().split('T')[0]}
+- CURRENT EXACT TIME (ISO): ${new Date().toISOString()}
 Only include fields that are present in the message. If nothing can be extracted, return {}.`;
 
     const response = await generate(message, system, { temperature: 0.1, num_predict: 800 });
