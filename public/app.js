@@ -20,7 +20,9 @@ async function api(path, opts = {}) {
     ...opts,
     body: opts.body ? JSON.stringify(opts.body) : undefined,
   });
-  return res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
 }
 
 // ── Util ────────────────────────────────────────────
@@ -84,10 +86,10 @@ async function sendMessage() {
         loadSessions();
     }
     typing.remove();
-    appendMsg('assistant', data.reply || 'Apologies — I couldn\'t process that directive.');
-  } catch {
+    appendMsg('assistant', data.reply || 'Apologies — system returned an empty response.');
+  } catch (err) {
     typing.remove();
-    appendMsg('assistant', 'Connection error — is Ollama running?');
+    appendMsg('assistant', 'Error — ' + (err.message || 'Check your Gemini API key and quota.'));
   }
   loadSidebarStats();
 }

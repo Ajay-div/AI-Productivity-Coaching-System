@@ -1,4 +1,4 @@
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyDQEy8u6gz1YchPd16I1csq5bs5odN7Rig';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyC3zf_iBPEEE3E-CDtoWp9GCTCCcl3DWWk';
 const MODEL = 'gemini-2.5-flash';
 
 /**
@@ -6,7 +6,7 @@ const MODEL = 'gemini-2.5-flash';
  */
 async function generate(prompt, system = '', options = {}) {
     if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY') {
-        console.warn('⚠️ Please set your GEMINI_API_KEY at the top of src/llm.js!');
+        console.warn('⚠️ Please set your GEMINI_API_KEY at the top of src/llm.js or in your environment!');
     }
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`;

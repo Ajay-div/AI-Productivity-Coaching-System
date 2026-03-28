@@ -55,7 +55,7 @@ router.post('/chat', async (req, res) => {
         res.json({ reply, session_id, extracted: true });
     } catch (err) {
         console.error('Chat error:', err);
-        res.status(500).json({ error: 'Failed to generate response. Is Ollama running?' });
+        res.status(500).json({ error: 'Failed to generate response. Check your Gemini API/quota.' });
     }
 });
 
